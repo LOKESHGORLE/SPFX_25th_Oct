@@ -1,0 +1,21 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "prod-disp-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/prodDisp/ProdDispWebPart.js",
+          "manifest": "./src/webparts/prodDisp/ProdDispWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {
+    "jquery":  "node_modules/jquery/dist/jquery.min.js",
+      "globalName": "jQuery"
+      },
+  "localizedResources": {
+    "ProdDispWebPartStrings": "lib/webparts/prodDisp/loc/{locale}.js"
+  }
+}
