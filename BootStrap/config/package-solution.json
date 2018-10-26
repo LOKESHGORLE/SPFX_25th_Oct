@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "boot-strap-example-client-side-solution",
+    "id": "9766aaa6-b49e-4dd4-ac77-3840aae3920d",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/boot-strap-example.sppkg"
+  }
+}
