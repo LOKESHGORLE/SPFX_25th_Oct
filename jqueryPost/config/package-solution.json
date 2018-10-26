@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "jquery-post-client-side-solution",
+    "id": "397f6777-c547-4af7-9549-672b0330cd07",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/jquery-post.sppkg"
+  }
+}
