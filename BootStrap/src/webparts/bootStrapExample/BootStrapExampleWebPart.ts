@@ -34,6 +34,8 @@ export default class BootStrapExampleWebPart extends BaseClientSideWebPart<IBoot
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
         <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+        <li data-target="#myCarousel" data-slide-to="4"></li>
       </ol>
   
       <!-- Wrapper for slides -->
@@ -79,12 +81,14 @@ export default class BootStrapExampleWebPart extends BaseClientSideWebPart<IBoot
   private getready() {
 
     var ParentSiteUrl = this.context.pageContext.web.absoluteUrl;
+
+
     jQuery(document).ready(function () {
       //jQuery("#dummyclick").click(function () {
-        alert("alertready");
+       
         
         var callAssignDisplayItems = jQuery.ajax({
-          url: ParentSiteUrl + "/_api/web/lists/getByTitle('Managers Speaks')/items?$select=ImageUrl,ID,Subject,Description",
+          url: ParentSiteUrl + "/_api/web/lists/getByTitle('Managers Speaks')/items?$select=ImageUrl,ID,Subject,Description&$orderby=Created desc&$top=5",
           type: "GET",
           dataType: "json",
           headers: {
@@ -132,7 +136,7 @@ export default class BootStrapExampleWebPart extends BaseClientSideWebPart<IBoot
       });
       var call = jQuery.when(callGetItemById);
       call.done(function (data, textStatus, jqXHR) {
-        alert(data.d.ImageUrl);
+        
            var  Modalbody= jQuery("#ModalBody");
            Modalbody.empty();
         var SlideCreation="<div class='table'><div class='row'><div class='col-sm-8'><img src='"+data.d.ImageUrl+"' alt='Chicago' style='width:70%;'/> </div><div class='col-sm-2'>"+data.d.Subject+" </div></div><div class='row'><p>"+data.d.Description+"</p></div></div>";
