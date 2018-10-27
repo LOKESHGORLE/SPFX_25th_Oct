@@ -1,0 +1,11 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": true,
+    "environment": "spo",
+    "version": "1.6.0",
+    "libraryName": "polling-app",
+    "libraryId": "89c1469c-c7ae-4aeb-bdc3-880091e119c6",
+    "packageManager": "npm",
+    "componentType": "webpart"
+  }
+}
