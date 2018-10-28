@@ -12,6 +12,7 @@ import { SPComponentLoader } from '@microsoft/sp-loader';
 //import  * as $ from 'jquery';
 import 'jquery';
 require('bootstrap');
+import  'charts';
 
 import styles from './PollingAppWebPart.module.scss';
 import * as strings from 'PollingAppWebPartStrings';
@@ -45,6 +46,7 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
         <button type='button center-block' id='VoteSubmit'class='VoteSubmitClass'>Submit Vote</button>
       </div>
   </div>
+  <div id="PieChart"></div>
   
 
 
@@ -150,7 +152,36 @@ var b;
             });
           }/**--------- ends the HTML creation for Venues  --------------------*/
          
-          
+          /**------- Chart Creation------------------------------------------------------ */
+          //ParentSiteUrl + "/_api/web/lists/getByTitle('LokPollingMembers')/items?$select=MemberName,ID,PlaceOfInterest/ID&$expand=PlaceOfInterest/ID"
+         /* var dataURL = ParentSiteUrl + "/_api/Lists/getbyTitle('LokPollingMembers')/Items?$top=50&$select=Title,PlaceOfInterest/ID&$expand=PlaceOfInterest/ID";
+          $.getJSON(dataURL, function (data) {
+              var dataFromSharepointList = data.value;
+  
+              drawChart(dataFromSharepointList, "PieChart")
+          });
+          function drawChart(ChartData, DivID) {
+              google.load("visualization", "1.0", { packages: ["bar"] });
+              google.charts.setOnLoadCallback(draw);
+              function draw() {
+                  var data = new google.visualization.DataTable();
+                  data.addColumn('string', 'Title');
+                  data.addColumn('string', 'PlaceOfInterest/ID');
+                  $.each(ChartData, function (key, value) {
+                      data.addRow([value.Title, value.PlaceOfInterest.ID]);
+                  });
+                  var chart = new google.visualization.Bar(document.getElementById(DivID));
+                  chart.draw(data, { allowHtml: true });
+              }
+          }*/
+  
+  
+/**------- rnds chart */
+
+
+
+
+
     });
     $(document).on("click", ".btn-primary" , function() {
       SelectedBtnID=0;
