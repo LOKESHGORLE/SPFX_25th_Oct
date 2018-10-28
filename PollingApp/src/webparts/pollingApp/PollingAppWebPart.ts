@@ -12,7 +12,7 @@ import { SPComponentLoader } from '@microsoft/sp-loader';
 //import  * as $ from 'jquery';
 import 'jquery';
 require('bootstrap');
-import  'charts';
+//import  'charts';
 
 import styles from './PollingAppWebPart.module.scss';
 import * as strings from 'PollingAppWebPartStrings';
@@ -106,6 +106,7 @@ var b;
           if(value.MemberName==CurrUseremail){
             CurrUserIdInList=value.ID;
             SelectedBtnID=value.PlaceOfInterest.ID;
+            
             CreateVenueButtons(SelectedBtnID);//calling button creation function
           }
 
@@ -142,6 +143,12 @@ var b;
            PollTabbody.append(VoteItemCreation);
   
             });
+            if(true){
+              alert("true");
+              alert(SelectedBtnID);
+              $('.VotePollbut').prop('disabled', true);
+              $("#"+SelectedBtnID).addClass("active").prop('disabled', false);
+            }
             });
            
   
@@ -150,7 +157,12 @@ var b;
               var message = response ? response.error.message.value : textStatus;
               alert("Call failed. Error: " + message);
             });
-          }/**--------- ends the HTML creation for Venues  --------------------*/
+            
+            
+          }
+          
+          
+          /**--------- ends the HTML creation for Venues  --------------------*/
          
           /**------- Chart Creation------------------------------------------------------ */
           //ParentSiteUrl + "/_api/web/lists/getByTitle('LokPollingMembers')/items?$select=MemberName,ID,PlaceOfInterest/ID&$expand=PlaceOfInterest/ID"
@@ -177,10 +189,6 @@ var b;
   
   
 /**------- rnds chart */
-
-
-
-
 
     });
     $(document).on("click", ".btn-primary" , function() {
