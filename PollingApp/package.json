@@ -20,6 +20,7 @@
     "@types/jquery": "^3.3.1",
     "@types/webpack-env": "1.13.1",
     "chart.js": "^2.7.3",
+    "google-charts": "^1.5.0",
     "sp-pnp-js": "^3.0.10"
   },
   "devDependencies": {
