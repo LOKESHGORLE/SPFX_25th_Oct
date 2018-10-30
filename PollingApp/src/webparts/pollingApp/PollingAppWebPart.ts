@@ -17,7 +17,8 @@ import {GoogleCharts} from 'google-charts';
 //import Chart from 'chart.js';
 import styles from './PollingAppWebPart.module.scss';
 import * as strings from 'PollingAppWebPartStrings';
-
+import { CurrentUser } from 'sp-pnp-js/lib/sharepoint/siteusers';
+var  CurrUseremail;
 export interface IPollingAppWebPartProps {
   description: string;
 }
@@ -61,7 +62,7 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
 
 
      `;
-     
+      CurrUseremail = this.context.pageContext.user.email;
     this.getReady();
     //this.drawChart();
     /*-------------------to get the id of the user ///// failed ////--------  */
@@ -109,6 +110,7 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
     chart.draw(data, options);
   }*/
   /*------------------ calling the document ready and all the jquery-------------    */
+  //public  CurrUseremail = this.context.pageContext.user.email;
   private getReady() {
     var ParentSiteUrl = this.context.pageContext.web.absoluteUrl;
     var SelectedBtnID;
@@ -119,6 +121,7 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
     var ArrayLocationVotes=[[]];
     var PieChartDataLegends=[['Location','Votes'] ];
     var PieChartData;
+    var UserExistsFlag=false;
     //alert(CurrUseremail);
     
     $(document).ready(function () {
@@ -171,11 +174,18 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
             CurrUserIdInList = value.ID;
             PreviousSelctedOptionID = value.PlaceOfInterest.ID;
             alert(PreviousSelctedOptionID);
-
-            CreateVenueButtons(PreviousSelctedOptionID);//calling button creation function
+            UserExistsFlag=true;
+           
           }
           
         });
+        if(UserExistsFlag){
+          CreateVenueButtons(PreviousSelctedOptionID);//calling button creation function
+        }
+        else{
+          PreviousSelctedOptionID=0;
+          CreateVenueButtons(PreviousSelctedOptionID);
+        }
         
       });
       call.fail(function (jqXHR, textStatus, errorThrown) {
@@ -214,7 +224,7 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
           GoogleCharts.load(drawChart);
           
           /**-------- Enabling Previous Vote and disabling remaining------ */
-          if (PreviousSelctedOptionID!=0) {
+          if (PreviousSelctedOptionID>0) {
             $('.VotePollbut').prop('disabled', true);
             $("#" + PreviousSelctedOptionID).addClass("active").prop('disabled', false);
           }
@@ -231,7 +241,7 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
 
       }
       /**--------- ends the HTML creation for Venues  --------------------*/
-      
+ /**--------------------- pie chart can be implemented by getting data directly from venue list-------------- *    
  function PieChartDraw(){
 
   var callAssignDisplayItems = jQuery.ajax({
@@ -252,7 +262,7 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
       
     
     });
-    /**-------- take data for pie chart      also cal pie cghart------ */
+    /**-------- take data for pie chart      also cal pie cghart------ *
     
   }
   );
@@ -265,7 +275,7 @@ export default class PollingAppWebPart extends BaseClientSideWebPart<IPollingApp
   });
 
 
- }
+ }**pie chart try ends here *********************/
 
 
 
@@ -375,7 +385,7 @@ function drawChart() {
         SelectedBtnID = $(this).attr('id');
         if (isEmpty(SelectedBtnID)) {
           alert("12")
-        } {
+        } else{
           alert(SelectedBtnID);
         }
 
@@ -383,26 +393,44 @@ function drawChart() {
       });
             if(SelectedBtnID!=PreviousSelctedOptionID){
             /* increase the vote count.... write function to post in venues votecount*/ 
-            var OldLocationIndex=PreviousSelctedOptionID-1;
-            var OldVoteCount=ArrayLocationVotes[OldLocationIndex][1]-1;
+          
             
 
             var NewLocationIndex=SelectedBtnID-1;
             var NewVoteCount=ArrayLocationVotes[NewLocationIndex][1]+1;
 
             /**----------- Members list updated----------------- */
-            pnp.sp.web.lists.getByTitle("LokPollingVenues").items.getById(PreviousSelctedOptionID).update({
-              VoteCount: OldVoteCount
-              });
+           
 
 
             pnp.sp.web.lists.getByTitle("LokPollingVenues").items.getById(SelectedBtnID).update({
             VoteCount: NewVoteCount
             });
             /**----------- Members list updated----------------- */
-            pnp.sp.web.lists.getByTitle("LokPollingMembers").items.getById(CurrUserIdInList).update({
-              PlaceOfInterestId: SelectedBtnID
-            });
+              if(UserExistsFlag){
+
+                var OldLocationIndex=PreviousSelctedOptionID-1;
+                var OldVoteCount=ArrayLocationVotes[OldLocationIndex][1]-1;
+
+                pnp.sp.web.lists.getByTitle("LokPollingMembers").items.getById(CurrUserIdInList).update({
+                  PlaceOfInterestId: SelectedBtnID
+                });
+                pnp.sp.web.lists.getByTitle("LokPollingVenues").items.getById(PreviousSelctedOptionID).update({
+                  VoteCount: OldVoteCount
+                  });
+                  ArrayLocationVotes[OldLocationIndex][1]=OldVoteCount;
+              }
+              else{
+                //var  CurrUseremail = this.context.pageContext.user.email;
+                pnp.sp.web.lists.getByTitle("LokPollingMembers").items.add({
+                  MemberName:CurrUseremail,
+                  PlaceOfInterestId: SelectedBtnID
+                });
+              }
+
+
+
+            
 
             
             
@@ -411,7 +439,7 @@ function drawChart() {
  
             }
      /********* sending two votes, the newly selected button must be Prev Selected for second transaction */
-     ArrayLocationVotes[OldLocationIndex][1]=OldVoteCount;      
+          
      ArrayLocationVotes[NewLocationIndex][1]=NewVoteCount;
 
      PreviousSelctedOptionID=SelectedBtnID;
